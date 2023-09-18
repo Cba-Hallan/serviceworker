@@ -1,14 +1,19 @@
-if ("serviceWorker" in navigator) {
-    // Register a service worker hosted at the root of the
-    // site using the default scope.
-    navigator.serviceWorker.register("/sw.js").then(
-      (registration) => {
-        console.log("Service worker registration succeeded:", registration);
-      },
-      (error) => {
-        console.error(`Service worker registration failed: ${error}`);
-      },
-    );
-  } else {
-    console.error("Service workers are not supported.");
-  }
+const APP = {
+    SW: null,
+    init() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js', {
+                scope: '/'
+            }).then(registration => {
+                APP.SW = registration.installing ||
+                    registration.waiting ||
+                    registration.active;
+                console.log("ServiceWorker register");
+            })
+        } else {
+            console.log('ServiceWorker are not supported.');
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded',APP.init);
